@@ -15,7 +15,7 @@ const createVueLoaderOptions = require('../config/vue-loader.config.js')
 const config = {
     target: 'web',
     entry: {
-        main: path.join(__dirname, '../client/main.js')
+        main: path.join(__dirname, '../client/entry.js')
     },
     output: {
         filename: 'bundle.[hash:8]js', // 在webpack-dev-server环境下，不能够使用chunk hash
