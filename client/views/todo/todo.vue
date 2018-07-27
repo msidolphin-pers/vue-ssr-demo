@@ -13,6 +13,9 @@ const COMPONENT_NAME = "todo"
 let id = 0
 export default {
   name: COMPONENT_NAME,
+  metaInfo: {
+    title: 'Todo List'
+  },
   data () {
     return {
       todo: {id: 0, completed: true, content: 'this is todo'},

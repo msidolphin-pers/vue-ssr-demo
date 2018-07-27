@@ -12,6 +12,12 @@
 </template>
 
 <script>
+export default {
+    name: 'App',
+    metaInfo: {
+        title: 'App'
+    }
+}
 </script>
 
 <style lang="scss">

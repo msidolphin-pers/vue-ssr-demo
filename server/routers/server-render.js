@@ -6,10 +6,16 @@ module.exports = async (ctx, renderer, template) => {
   let context = {url: ctx.path}
   try {
     const appString = await renderer.renderToString(context)
+    // vue-meta
+    const $meta = context.meta.inject()
+    const meta = {
+      title: $meta.title.text()
+    }
     let html = ejs.render(template, {
       appString: appString,
       styles: context.renderStyles(),
-      scripts: context.renderScripts()
+      scripts: context.renderScripts(),
+      meta
     })
     // 压缩Html
     html = minifier(html, {

@@ -8,7 +8,10 @@ export default context => {
     router.push(context.url)
     router.onReady(() => {
       let matchedComponents = router.getMatchedComponents()
-      if (matchedComponents && matchedComponents.length) resolve(app)
+      if (matchedComponents && matchedComponents.length) {
+        context.meta = app.$meta()
+        resolve(app)
+      }
       else return reject(new Error('no componet matched.'))
     })
   })
