@@ -1,86 +1,50 @@
 const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const createVueLoaderOptions = require('../config/vue-loader.config')
 
-
-const NODE_ENV = process.env.NODE_ENV
-
-var isDev = false
-
-if (NODE_ENV === 'development') isDev = true
-
-const createVueLoaderOptions = require('../config/vue-loader.config.js')
+const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
-    target: 'web',
-    entry: {
-        main: path.join(__dirname, '../client/entry.js')
-    },
-    output: {
-        filename: 'bundle.[hash:8]js', // 在webpack-dev-server环境下，不能够使用chunk hash
-        path: path.join(__dirname, '../dist')
-    },
-    module: {
-        rules: [
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader',
-                options: createVueLoaderOptions(isDev)
-            },
-            {
-                test: /\.jsx$/,
-                use: ['babel-loader']
-            },
-            {
-                test: /\.js$/,
-                use: ['babel-loader'],
-                exclude: /node_modules/
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader']
-            },
-            {
-                test: /\.styl$/,
-                use: [
-                    'style-loader', 
-                    'css-loader', 
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }, 
-                    'stylus-loader'
-                ]
-            },
-            {
-                test: /\.(gif|png|jpg|jpeg|bmp|svg|tiff)$/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 1024,
-                            name: 'assets/images/[name]-[hash:8].[ext]'
-                        }
-                    }
-                ]
+  target: 'web',
+  entry: path.join(__dirname, '../client/entry.js'),
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.join(__dirname, '../dist'),
+    publicPath: 'http://192.168.0.19:9000/'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: createVueLoaderOptions(isDev)
+      },
+      {
+        test: /\.jsx$/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(gif|jpg|jpeg|png|svg|bmp|tiff)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 1024,
+              name: 'resources/[path][name].[hash:8].[ext]'
             }
+          }
         ]
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: isDev ? '"development"' : '"production"'
-            }
-        }),
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, '../example/index.html')
-        }),
-        new VueLoaderPlugin()
-    ],
-    resolve: {}
+      }
+    ]
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
 }
 
 module.exports = config

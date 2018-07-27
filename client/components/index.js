@@ -4,15 +4,15 @@ import Footer from './footer'
 import Item from './item'
 import Tabs from './tabs'
 
-const componets = {
+const components = {
   Header,
   Footer,
   Item,
   Tabs
 }
 
-for (name in componets) {
-  if (componets[name].install) componets[name].install(Vue)
+for (let name in components) {
+  if (components[name].install) components[name].install(Vue)
 }
 
-export default componets
+export default components

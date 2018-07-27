@@ -1,62 +1,70 @@
 const path = require('path')
+const HTMLPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.config.base.js')
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+const ExtractPlugin = require('extract-text-webpack-plugin')
+const baseConfig = require('./webpack.config.base')
+const VueClientPlugin = require('vue-server-renderer/client-plugin')
+const isDev = process.env.NODE_ENV === 'development'
 
-const NODE_ENV = process.env.NODE_ENV
+const defaultPluins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: isDev ? '"development"' : '"production"'
+    }
+  }),
+  new HTMLPlugin({
+    template: path.join(__dirname, '../index.html')
+  }),
+  new VueClientPlugin()
+]
 
-var isProd
+let config
 
-if (NODE_ENV === 'production') isProd = true
-
-var config = {}
-
-if (isProd) {
+if (!isDev) {
   config = merge(baseConfig, {
     entry: {
-      app: path.join(__dirname, '../client/main.js'),
-      vendor: ['vue'] // 打包类库
+      app: path.join(__dirname, '../client/client-entry.js'),
+      vendor: ['vue']
     },
     output: {
-      // 使用chunkhash的原因 每一个定义在entry中的元素都是一个chunk
-      // 直接使用hash的话entry中的模块都是同一个hash（整个应用，如果业务代码改变了会导致类库文件的hash也会改变）
-      filename: 'assets/js/[name].[chunkhash:8].js'
+      filename: '[name].[chunkhash:8].js',
+      publicPath: cdnConfig.host
     },
     module: {
       rules: [
         {
           test: /\.(scss|sass)$/,
-          use: ExtractTextWebpackPlugin.extract({
-              fallback: 'style-loader',
-              use: [
-                  'css-loader',
-                  {
-                      loader: 'postcss-loader',
-                      options: {
-                          sourceMap: true
-                      }
-                  },
-                  'sass-loader'
-              ]
+          use: ExtractPlugin.extract({
+            fallback: 'vue-style-loader',
+            use: [
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              'sass-loader'
+            ]
           })
         }
       ]
     },
-    plugins: [
-      new ExtractTextWebpackPlugin('assets/styles/styles.[contentHash:8].css'),
-      // 单独打包类库
+    plugins: defaultPluins.concat([
+      new ExtractPlugin('styles.[contentHash:8].css'),
       new webpack.optimize.CommonsChunkPlugin({
-          name: 'vendor'
+        name: 'vendor'
       }),
-      // 将webpack相关文件单独打包（就是app.[hash].js中的webpack代码）
       new webpack.optimize.CommonsChunkPlugin({
-          name: 'runtime'
-      })
-    ]
+        name: 'runtime'
+      }),
+      new webpack.NamedChunksPlugin()
+    ])
   })
-} else {
-  throw new Error('current environment is not production')
+}
+
+config.resolve = {
 }
 
 module.exports = config

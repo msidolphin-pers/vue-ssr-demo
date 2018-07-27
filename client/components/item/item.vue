@@ -15,17 +15,17 @@
 const COMPONENT_NAME = "todo-item"
 export default {
   name: COMPONENT_NAME,
-    props: {
-      todo: {
-        type: Object,
-        required: true
-      }
-    },
-    methods: {
-      deleteTodo () {
-        this.$emit('onDelete', this.$props.todo.id)
-      }
+  props: {
+    todo: {
+      type: Object,
+      required: true
     }
+  },
+  methods: {
+    deleteTodo () {
+      this.$emit('onDelete', this.$props.todo.id)
+    }
+  }
 }
 </script>
 

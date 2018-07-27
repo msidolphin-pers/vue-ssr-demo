@@ -1,5 +1,5 @@
 import createVue from './main.js'
 
-const app = createVue()
+const {app} = createVue()
 
 app.$mount('#app')

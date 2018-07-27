@@ -9,32 +9,10 @@
 </template>
 
 <script>
-import ScrollBar from '../../components/scroll-bar/scroll-bar.vue'
 const COMPONENT_NAME = "todo"
 let id = 0
 export default {
   name: COMPONENT_NAME,
-  components: {
-    ScrollBar
-  },
-  // 需要注意的是，在这些钩子中，组件还没有渲染挂载完毕，这时是不能使用this的 解决方法是使用next方法的回调
-  beforeRouteEnter (to, from, next) {
-    // ...
-    console.log('todo before route enter invoked')
-    next(vm => {
-      console.log(vm)
-    })
-  },
-  beforeRouteUpdate (to, from, next) {
-    // 同一个组件不同的路由会被触发 使用场景：可以代替watch获取路由参数，节省watch开销
-    console.log('todo before route update invoked')
-    next()
-  },
-  beforeRouteLeave (to, from, next) {
-    // ...
-    console.log('todo before route leave invoked')
-    next()
-  },
   data () {
     return {
       todo: {id: 0, completed: true, content: 'this is todo'},

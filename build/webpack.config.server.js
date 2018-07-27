@@ -1,58 +1,61 @@
 const path = require('path')
+const ExtractPlugin = require('extract-text-webpack-plugin')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.config.base.js')
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+const baseConfig = require('./webpack.config.base')
 const VueServerPlugin = require('vue-server-renderer/server-plugin')
 
-const NODE_ENV = process.env.NODE_ENV
+let config
 
-var isProd
+const isDev = process.env.NODE_ENV === 'development'
 
-if (NODE_ENV === 'production') isProd = true
+const plugins = [
+  new ExtractPlugin('styles.[contentHash:8].css'),
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    'process.env.VUE_ENV': '"server"'
+  })
+]
 
-var config = {}
+if (isDev) {
+  plugins.push(new VueServerPlugin())
+}
 
 config = merge(baseConfig, {
   target: 'node',
+  entry: path.join(__dirname, '../server/main.js'),
   devtool: 'source-map',
-  entry: {
-    main: path.join(__dirname, '../server/main.js')
-  },
   output: {
     libraryTarget: 'commonjs2',
-    filename: '[name].js',
-    path: path.join(__dirname, '../server')
+    filename: 'server-entry.js',
+    path: path.join(__dirname, '../server-build'),
+    publicPath: 'http://localhost:9000/'
   },
   externals: Object.keys(require('../package.json').dependencies),
   module: {
     rules: [
       {
-        test: /\.(scss|sass)$/,
-        use: ExtractTextWebpackPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-                'css-loader',
-                {
-                    loader: 'postcss-loader',
-                    options: {
-                        sourceMap: true
-                    }
-                },
-                'sass-loader'
-            ]
+        test: /\.(sass|scss)$/,
+        use: ExtractPlugin.extract({
+          fallback: 'vue-style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            'sass-loader'
+          ]
         })
       }
     ]
   },
-  plugins: [
-    new ExtractTextWebpackPlugin('assets/styles/styles.[contentHash:8].css'),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProd ? 'production' : 'development',
-      'process.env.VUE_ENV': 'server'
-    }),
-    new VueServerPlugin()
-  ]
+  plugins
 })
+
+config.resolve = {
+}
 
 module.exports = config
