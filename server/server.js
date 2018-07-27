@@ -2,10 +2,8 @@ const Koa = require('koa')
 const send = require('koa-send')
 const path = require('path')
 const app = new Koa()
-const router = require('./routers/dev-ssr.js')
 
 const isDev = process.env.NODE_ENV === 'development'
-
 
 // middleware
 app.use(async (ctx, next) => {
@@ -23,9 +21,6 @@ app.use(async (ctx, next) => {
   }
 })
 
-const HOST = process.env.HOST || '0.0.0.0'
-const PORT = process.env.PORT || 3333
-
 // 使用Koa-send 处理静态资源
 app.use(async (ctx, next) => {
   if (ctx.path === '/favicon.ico') {
@@ -36,9 +31,21 @@ app.use(async (ctx, next) => {
   }
 })
 
-// TODO
+let router
+
+if (isDev) {
+  router = require('./routers/dev-ssr.js')
+} else {
+  router = require('./routers/ssr.js')
+  let staticRouter = require('./routers/static.js')
+  app.use(staticRouter.routes()).use(staticRouter.allowedMethods())
+}
+
 app.use(router.routes()).use(router.allowedMethods())
 
+
+const HOST = process.env.HOST || '0.0.0.0'
+const PORT = process.env.PORT || 3333
 
 app.listen(PORT, HOST, () => {
   console.log(`server is running at ${HOST}:${PORT}`)

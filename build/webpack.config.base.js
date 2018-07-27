@@ -10,7 +10,7 @@ const config = {
   output: {
     filename: 'bundle.[hash:8].js',
     path: path.join(__dirname, '../dist'),
-    publicPath: 'http://192.168.0.19:9000/'
+    publicPath: 'http://127.0.0.1:9000/'
   },
   module: {
     rules: [
@@ -35,7 +35,7 @@ const config = {
             loader: 'url-loader',
             options: {
               limit: 1024,
-              name: 'resources/[path][name].[hash:8].[ext]'
+              name: 'assets/images/[name].[hash:8].[ext]'
             }
           }
         ]

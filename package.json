@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.config.prod.js",
-    "build": "npm run clean && npm run build:client",
+    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.config.server.js",
+    "build": "npm run clean && npm run build:client && npm run build:server",
+    "start": "cross-env NODE_ENV=production node server/server.js",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.dev.js",
     "dev:server": "nodemon server/server.js",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\""

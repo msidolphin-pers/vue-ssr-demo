@@ -24,12 +24,12 @@ let config
 if (!isDev) {
   config = merge(baseConfig, {
     entry: {
-      app: path.join(__dirname, '../client/client-entry.js'),
+      app: path.join(__dirname, '../client/entry.js'),
       vendor: ['vue']
     },
     output: {
-      filename: '[name].[chunkhash:8].js',
-      publicPath: cdnConfig.host
+      filename: 'assets/js/[name].[chunkhash:8].js',
+      publicPath: '/dist/'
     },
     module: {
       rules: [
@@ -52,7 +52,7 @@ if (!isDev) {
       ]
     },
     plugins: defaultPluins.concat([
-      new ExtractPlugin('styles.[contentHash:8].css'),
+      new ExtractPlugin('assets/css/styles.[contentHash:8].css'),
       new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor'
       }),

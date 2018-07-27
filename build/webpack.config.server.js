@@ -17,9 +17,9 @@ const plugins = [
   })
 ]
 
-if (isDev) {
-  plugins.push(new VueServerPlugin())
-}
+
+plugins.push(new VueServerPlugin())
+
 
 config = merge(baseConfig, {
   target: 'node',
@@ -28,8 +28,7 @@ config = merge(baseConfig, {
   output: {
     libraryTarget: 'commonjs2',
     filename: 'server-entry.js',
-    path: path.join(__dirname, '../server-build'),
-    publicPath: 'http://localhost:9000/'
+    path: path.join(__dirname, '../server-build')
   },
   externals: Object.keys(require('../package.json').dependencies),
   module: {
