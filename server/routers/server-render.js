@@ -1,5 +1,4 @@
 const ejs = require('ejs')
-const $global = require('../../client/utils/global')
 const minifier = require('html-minifier').minify
 
 module.exports = async (ctx, renderer, template) => {
@@ -11,6 +10,11 @@ module.exports = async (ctx, renderer, template) => {
   }
   try {
     const appString = await renderer.renderToString(context)
+    if (context.router.currentRoute.fullPath !== ctx.path) {
+      // 解决客户端首屏可能出现的页面跳转问题（未登录 => 登录页）
+      return ctx.redirect(context.router.currentRoute.fullPath)
+    }
+
     // vue-meta
     const $meta = context.meta.inject()
     const meta = {

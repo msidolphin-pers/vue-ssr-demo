@@ -29,6 +29,7 @@ app.use(koaBody())
 app.use(async (ctx, next) => {
   try {
     console.log(`ctx.request = ${ctx.path}`)
+    // 代理
     if (isDev && (ctx.path.endsWith('.js') || ctx.path.endsWith('.css') ||
       ctx.path.endsWith('.jpg') || ctx.path.endsWith('.jpeg')))  {
       ctx.respond = false

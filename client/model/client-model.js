@@ -1,6 +1,5 @@
 import Axios from 'axios'
 import {createError} from './utils'
-const $global = require('../../client/utils/global')
 
 const request = Axios.create({
   baseURL: process.env.VUE_ENV === 'server' ? 'http://127.0.0.1:3333/' : '/'
@@ -36,7 +35,6 @@ export default {
   
   getAllTodos () {
     if (process.env.VUE_ENV === 'server') {
-      console.log('.....')
       return handleRequest(request.get('/api/todos', {
         headers: {
           cookie: getCookies()

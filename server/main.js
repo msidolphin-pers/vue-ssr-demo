@@ -14,13 +14,17 @@ export default context => {
       if (matchedComponents && matchedComponents.length) {
         Promise.all(matchedComponents.map(component => {
           if (component.asyncData) {
+            // 也可以在这里携带cookie信息
             return component.asyncData({
-              store
+              store,
+              route: router.currentRoute,
+              router
             })
           }
         })).then(() => {
           context.meta = app.$meta()
           context.state = store.state
+          context.router = router
           resolve(app)
         })
       }
