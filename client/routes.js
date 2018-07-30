@@ -4,7 +4,7 @@ import Login from './views/login/login.vue'
 export default [
   {
     path: '/',
-    redirect: '/app'
+    component: () => import('./views/todo/todo.vue'), // Todo, //
   },
   {
     path: '/app',

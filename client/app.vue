@@ -1,7 +1,5 @@
 <template>
     <div class="container">
-        <router-link to="/login">Login</router-link>
-        <router-link to="/app">App</router-link>
         <div class="mask"></div>
         <todo-header/>
         <transition name="fade">
@@ -12,7 +10,7 @@
 </template>
 
 <script>
-export default {
+export default {   
     name: 'App',
     metaInfo: {
         title: 'App'

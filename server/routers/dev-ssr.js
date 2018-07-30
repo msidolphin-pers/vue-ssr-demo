@@ -6,6 +6,8 @@ const Webpack = require('webpack')
 const VueServerRenderer = require('vue-server-renderer')
 const fs = require('fs')
 
+
+
 const serverConfig = require('../../build/webpack.config.server.js')
 const serverRender = require('./server-render.js')
 
@@ -49,5 +51,6 @@ const handleSSR = async (ctx) => {
 
 const router = new Router()
 router.get('*', handleSSR)
+
 
 module.exports = router

@@ -1,15 +1,21 @@
 import Header from './header'
 import Footer from './footer'
 import Item from './item'
-import Tabs from './tabs'
+import Helper from './helper'
 import Notification from './notification'
+import $Tabs from './tabs'
+
+const Tab = $Tabs.Tab
+const Tabs = $Tabs.Tabs
 
 const components = {
   Header,
   Footer,
   Item,
-  Tabs,
-  Notification
+  Helper,
+  Notification,
+  Tab,
+  Tabs
 }
 
 const install = (Vue) => {

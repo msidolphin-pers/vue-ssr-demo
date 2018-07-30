@@ -1,9 +1,13 @@
 const ejs = require('ejs')
+const $global = require('../../client/utils/global')
 const minifier = require('html-minifier').minify
 
 module.exports = async (ctx, renderer, template) => {
   ctx.headers['Content-Type'] = 'text/html'
-  let context = {url: ctx.path}
+  let context = {
+    url: ctx.path,
+    request: ctx.cookies.request
+  }
   try {
     const appString = await renderer.renderToString(context)
     // vue-meta

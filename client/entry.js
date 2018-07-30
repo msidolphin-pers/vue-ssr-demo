@@ -1,5 +1,7 @@
 import createVue from './main.js'
 
-const {app} = createVue()
+const {app, router} = createVue()
 
-app.$mount('#app')
+router.onReady(() => {
+  app.$mount('#app')
+})

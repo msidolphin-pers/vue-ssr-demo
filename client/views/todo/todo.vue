@@ -1,14 +1,20 @@
 <template>
   <section class="todo-wrapper">
-    <input type="text" class="add-input" autofocus="autofocus" placeholder="接下来要做什么？" @keyup.enter="addTodo"/>
+    <tabs :value.sync="filter">
+      <tab v-for="tab in tabs" :key="tab" :label="tab" :index="tab"/>
+    </tabs>
+    <input type="text" class="add-input" autofocus="true" placeholder="接下来要做什么？" @keyup.enter="addTodo"/>
     <div class="todo-list">
       <todo-item v-for="todo in filtedTodos" :todo="todo" :key="todo.id" @onDelete="onDeleteHandle"/>
     </div>
-    <todo-tabs :filter="filter" :todos="filtedTodos" @onStateChange="onStateChangeHandle" @onClearClick="onClearClickHandle"/>
+    <helper :filter="filter" :todos="filtedTodos" @onStateChange="onStateChangeHandle" @onClearClick="onClearClickHandle"/>
   </section>
 </template>
 
 <script>
+import {
+  mapState, mapActions
+} from 'vuex'
 const COMPONENT_NAME = "todo"
 let id = 0
 export default {
@@ -16,14 +22,20 @@ export default {
   metaInfo: {
     title: 'Todo List'
   },
+  asyncData ({ store, route }) {
+    // 触发 action 后，会返回 Promise
+    return store.dispatch('fetchTodos')
+  },
   data () {
     return {
       todo: {id: 0, completed: true, content: 'this is todo'},
-      todos: [],
-      filter: 'all'
+      filter: 'all',
+      inputValue: '',
+      tabs: ['all', 'active', 'completed']
     }
   },
   computed: {
+    ...mapState(['todos']),
     filtedTodos () {
       switch(this.filter) {
         case 'all':
@@ -37,6 +49,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['fetchTodos']),
     addTodo (e) {
       if (!e.target.value.trim()) {
         return
@@ -59,6 +72,7 @@ export default {
     }
   },
   mounted () {
+    this.fetchTodos()
   }
 }
 </script>

@@ -29,6 +29,10 @@ const devServer = {
   historyApiFallback: {
     index: '/index.html'
   },
+  proxy: {
+    '/api': 'http://127.0.0.1:3333',
+    '/user': 'http://127.0.0.1:3333'
+  },
   hot: true
 }
 
@@ -41,27 +45,24 @@ if (isDev) {
       rules: [
         {
           test: /\.(scss|sass)$/,
-          use: ExtractPlugin.extract({
-            fallback: 'vue-style-loader',
-            use: [
-              'css-loader',
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true
-                }
-              },
-              'sass-loader'
-            ]
-          })
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            'sass-loader'
+          ]
         }
       ]
     },
     devServer,
     plugins: defaultPluins.concat([
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new ExtractPlugin('styles.[contentHash:8].css')
+      new webpack.NoEmitOnErrorsPlugin()
     ])
   })
 } else {
