@@ -23,6 +23,7 @@ export default {
     title: 'Todo List'
   },
   asyncData ({ store, route }) {
+    console.log('sadsad')
     // 触发 action 后，会返回 Promise
     return store.dispatch('fetchTodos')
   },
@@ -72,7 +73,9 @@ export default {
     }
   },
   mounted () {
-    this.fetchTodos()
+    if (this.todos && this.todos.length < 1) {
+      this.fetchTodos()
+    }
   }
 }
 </script>

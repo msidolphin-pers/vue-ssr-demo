@@ -4,6 +4,9 @@ import createApp from '../client/main.js'
 export default context => {
   return new Promise((resolve, reject) => {
     const {app, router, store} = createApp()
+    if (context.user) {
+      store.state.user = context.user
+    }
     // 主动调用router.push操作，"渲染"相关组件
     router.push(context.url)
     router.onReady(() => {
@@ -17,6 +20,7 @@ export default context => {
           }
         })).then(() => {
           context.meta = app.$meta()
+          context.state = store.state
           resolve(app)
         })
       }

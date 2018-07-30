@@ -9,7 +9,7 @@ const request = Axios.create({
 const getCookies = () => {
   const request = global.__VUE_SSR_CONTEXT__.request
   const cookie = request.headers.cookie
-  return cookie
+  return cookie ? cookie : {}
 }
 
 const handleRequest = (request) => {
@@ -36,6 +36,7 @@ export default {
   
   getAllTodos () {
     if (process.env.VUE_ENV === 'server') {
+      console.log('.....')
       return handleRequest(request.get('/api/todos', {
         headers: {
           cookie: getCookies()

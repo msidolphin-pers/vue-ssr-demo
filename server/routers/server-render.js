@@ -6,7 +6,8 @@ module.exports = async (ctx, renderer, template) => {
   ctx.headers['Content-Type'] = 'text/html'
   let context = {
     url: ctx.path,
-    request: ctx.cookies.request
+    request: ctx.cookies.request,
+    user: ctx.session.user
   }
   try {
     const appString = await renderer.renderToString(context)
@@ -19,6 +20,7 @@ module.exports = async (ctx, renderer, template) => {
       appString: appString,
       styles: context.renderStyles(),
       scripts: context.renderScripts(),
+      initialState: context.renderState(),
       meta
     })
     // 压缩Html

@@ -1,10 +1,9 @@
 <template>
     <div class="container">
+        <router-link to="/login">login</router-link><router-link to="/app">app</router-link>
         <div class="mask"></div>
         <todo-header/>
-        <transition name="fade">
-            <router-view></router-view>
-        </transition>
+        <router-view></router-view>
         <todo-footer/>
     </div>
 </template>

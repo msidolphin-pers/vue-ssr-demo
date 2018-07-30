@@ -19,7 +19,7 @@ body {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: all .5s;
+  transition: opacity .5s;
 }
 
 .fade-enter, .fade-leave-to {
